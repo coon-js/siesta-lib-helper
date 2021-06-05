@@ -1,0 +1,45 @@
+{
+  "name": "@coon-js/siesta-lib-helper",
+  "version": "0.0.1",
+  "description": "Collection of utility- and helper-methods when working with Siesta (https://bryntum.com) in an ExtJS-Browser environment.",
+  "main": "dist/siesta-lib-helper.esm.js",
+  "type": "module",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coon-js/siesta-lib-helper.git"
+  },
+  "keywords": [
+    "siesta",
+    "bryntum",
+    "extjs",
+    "tests",
+    "ui",
+    "tests",
+    "sencha",
+    "coon.js",
+    "coon-js",
+    "l8.js",
+    "l8js",
+    "l8",
+    "javascript",
+    "testing"
+  ],
+  "author": "Thorsten Suckow-Homberg <thorsten@suckow-homberg.de>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/coon-js/siesta-lib-helper/issues"
+  },
+  "homepage": "https://github.com/coon-js/siesta-lib-helper#readme",
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.14.3",
+    "@babel/preset-env": "^7.14.4",
+    "@l8js/l8": "file:../../l8js/l8",
+    "@rollup/plugin-alias": "^3.1.2",
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "jest": "^27.0.4",
+    "rollup": "^2.50.6"
+  }
+}
