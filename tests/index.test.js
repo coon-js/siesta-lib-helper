@@ -141,5 +141,6 @@ test("configureWithExtJsLinkPaths()", async () => {
         }
     });
 
+    spy.mockClear();
 
 });
