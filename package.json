@@ -36,7 +36,7 @@
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.14.3",
     "@babel/preset-env": "^7.14.4",
-    "@l8js/l8": "file:../../l8js/l8",
+    "@l8js/l8": "file:../../@l8js/l8",
     "@rollup/plugin-alias": "^3.1.2",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "jest": "^27.0.4",

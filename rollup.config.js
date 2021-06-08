@@ -31,8 +31,7 @@ export default {
         file :'./dist/siesta-lib-helper.runtime.esm.js',
         format: 'esm',
         sourcemap: 'inline',
-        name : "default",
-        external : ["@l8js/l8"]
+        name : "default"
     },
     plugins: [
         alias({

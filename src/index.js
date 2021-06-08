@@ -23,7 +23,106 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import {core} from "@l8js/l8";
+import * as l8 from "@l8js/l8";
+
+
+/**
+ * Uses the specified testConfig and applies the extjs(!) related paths found at
+ * pathConfigUrl (config-file url()) to it, then passes it to getPaths() and returns the value.
+ * pathConfigUrl should be in a format @coon-js/extjs-link produces.
+ *
+ * @example
+ *
+ *  json at "pathConfigUrl.json":
+ *
+ *  {
+ *       css: [{
+ *           extjs: {
+ *               modern: [
+ *                   "foo.css"
+ *               ],
+ *               classic: [
+ *                   "bar.css"
+ *               ]
+ *           }
+ *       }],
+ *       js: {
+ *          extjs: {
+ *               modern: "modern.js",
+ *               classic: "classic.js"
+ *          }
+ *      }
+ *   }
+ *
+ *
+ *  const config = {
+ *      loaderPath: {
+ *       "Ext.Package": "/node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/src/Package.js",
+ *       "coon.core": "../src/",
+ *   },
+ *   preloads: {
+ *       css: [{
+ *           extjs: {
+ *               modern: [
+ *                   "/node_modules/@sencha/ext-modern-runtime/material/material-all_1.css",
+ *                   "/node_modules/@sencha/ext-modern-runtime/material/material-all_2.css"
+ *               ],
+ *               classic: [
+ *                   "/node_modules/@sencha/ext-classic-runtime/material/material-all_1.css",
+ *                   "/node_modules/@sencha/ext-classic-runtime/material/material-all_2.css",
+ *                   "/node_modules/@sencha/ext-classic-runtime/material/material-all_3.css"
+ *               ]
+ *           }
+ *       }],
+ *       js: [
+ *           "/node_modules/@l8js/l8/dist/l8.runtime.js", {
+ *           extjs: {
+ *               modern: "/node_modules/@sencha/ext-modern-runtime/modern.engine.enterprise.js",
+ *               classic: "/node_modules/@sencha/ext-modern-runtime/classic.engine.enterprise.js"
+ *           }}
+ *       ]
+ *   }};
+ *
+ *  configureWithExtJsLinkPaths(config, "pathConfigUrl.json", true); // returns {
+ *   //   preload : [
+ *   //       "foo.css",
+ *   //       "/node_modules/@l8js/l8/dist/l8.runtime.js",
+ *   //       "modern.js"
+ *   //   ],
+ *   //   loaderPath : {
+ *   //       "Ext.Package": "/node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/src/Package.js",
+ *   //       "coon.core": "../src/"
+ *   //   }
+ *  // };
+ *
+ *
+ * @param {Object} testConfig
+ * @param {String} pathConfigUrl
+ * @param {Boolean} isModern
+ * @returns {Promise<{loaderPath: {}, preload: *[]}>}
+ */
+export const configureWithExtJsLinkPaths = async function (testConfig, pathConfigUrl, isModern) {
+
+    const
+        loader = new l8.request.FileLoader();
+
+    if (await loader.ping(pathConfigUrl)) {
+        const
+            symlinks = JSON.parse(await loader.load(pathConfigUrl)),
+            ff = l8.ff.bind(null, "extjs"),
+            css = l8.nchn("preload.css", testConfig, ff),
+            js =  l8.nchn("preload.js", testConfig, ff);
+
+        ["classic", "modern"].forEach(toolkit => {
+            css[toolkit] = l8.ff("extjs", symlinks.css)[toolkit];
+            js[toolkit] = l8.ff("extjs", symlinks.js)[toolkit];
+        });
+    }
+
+    return getPaths(testConfig, isModern);
+
+};
+
 
 /**
  * Consumes a configuration object and looks up js/css-related path information,
@@ -79,9 +178,9 @@ export const getPaths = (config, isModern) => {
 
     const
         result = {preload: [], loaderPath: {}},
-        isObject = core.isObject,
-        isArray = core.isArray,
-        isString = core.isString,
+        isObject = l8.isObject,
+        isArray = l8.isArray,
+        isString = l8.isString,
         toolkit = isModern ? "modern" : isModern === false ? "classic" : null,
         parseSection = (section) => {
 

@@ -23,8 +23,8 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
-import {getPaths} from "../src/index.js";
+import * as l8 from "@l8js/l8";
+import {getPaths, configureWithExtJsLinkPaths} from "../src/index.js";
 
 
 test("getPaths", () => {
@@ -70,4 +70,76 @@ test("getPaths", () => {
         }
     });
     
+});
+
+
+test("configureWithExtJsLinkPaths()", async () => {
+
+    const config = {
+        loaderPath: {
+            "Ext.Package": "/node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/src/Package.js",
+            "coon.core": "../src/"
+        },
+        preload: {
+            css: [{
+                extjs: {
+                    modern: [
+                        "/node_modules/@sencha/ext-modern-runtime/material/material-all_1.css",
+                        "/node_modules/@sencha/ext-modern-runtime/material/material-all_2.css"
+                    ],
+                    classic: [
+                        "/node_modules/@sencha/ext-classic-runtime/material/material-all_1.css",
+                        "/node_modules/@sencha/ext-classic-runtime/material/material-all_2.css",
+                        "/node_modules/@sencha/ext-classic-runtime/material/material-all_3.css"
+                    ]
+                }
+            }],
+            js: [
+                "/node_modules/@l8js/l8/dist/l8.runtime.js", {
+                    extjs: {
+                        modern: "/node_modules/@sencha/ext-modern-runtime/modern.engine.enterprise.js",
+                        classic: "/node_modules/@sencha/ext-modern-runtime/classic.engine.enterprise.js"
+                    }}
+            ]
+        }};
+
+    let fileLoader = new l8.request.FileLoader();
+    let spy = jest.spyOn(fileLoader, "load").mockReturnValue({
+
+        "css": {
+            "extjs": {
+                "modern": "A",
+                "classic": "B"
+            }
+        },
+
+        "js": [{
+            "extjs": {
+                "classic": [
+                    "C",
+                    "D"
+                ],
+                "modern": [
+                    "E",
+                    "F"
+                ]
+            }
+        }]
+
+    });
+
+
+    expect(configureWithExtJsLinkPaths(config, "url", true)).resolves.toEqual({
+        preload: [
+            "A",
+            "/node_modules/@l8js/l8/dist/l8.runtime.js",
+            "E"
+        ],
+        loaderPath: {
+            "Ext.Package": "/node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/src/Package.js",
+            "coon.core": "../src/"
+        }
+    });
+
+
 });
