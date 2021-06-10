@@ -23,6 +23,7 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+
 import * as l8 from "@l8js/l8";
 import {getPaths, configureWithExtJsLinkPaths} from "../src/index.js";
 
@@ -32,28 +33,31 @@ test("getPaths", () => {
     const config = {
         loaderPath: {
             "Ext.Package": "/node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/src/Package.js",
-            "coon.core": "../src/"
+            "coon.core": "../src/",
+            "modern": {
+                "modern" : "included"
+            },
+            "classic": {
+                "classic" : "included"
+            }
         },
         preload: {
             css: [{
-                extjs: {
-                    modern: [
-                        "/node_modules/@sencha/ext-modern-runtime/material/material-all_1.css",
-                        "/node_modules/@sencha/ext-modern-runtime/material/material-all_2.css"
-                    ],
-                    classic: [
-                        "/node_modules/@sencha/ext-classic-runtime/material/material-all_1.css",
-                        "/node_modules/@sencha/ext-classic-runtime/material/material-all_2.css",
-                        "/node_modules/@sencha/ext-classic-runtime/material/material-all_3.css"
-                    ]
-                }
+                modern: [
+                    "/node_modules/@sencha/ext-modern-runtime/material/material-all_1.css",
+                    "/node_modules/@sencha/ext-modern-runtime/material/material-all_2.css"
+                ],
+                classic: [
+                    "/node_modules/@sencha/ext-classic-runtime/material/material-all_1.css",
+                    "/node_modules/@sencha/ext-classic-runtime/material/material-all_2.css",
+                    "/node_modules/@sencha/ext-classic-runtime/material/material-all_3.css"
+                ]
             }],
             js: [
                 "/node_modules/@l8js/l8/dist/l8.runtime.js", {
-                    extjs: {
-                        modern: "/node_modules/@sencha/ext-modern-runtime/modern.engine.enterprise.js",
-                        classic: "/node_modules/@sencha/ext-modern-runtime/classic.engine.enterprise.js"
-                    }}
+                    modern: "/node_modules/@sencha/ext-modern-runtime/modern.engine.enterprise.js",
+                    classic: "/node_modules/@sencha/ext-modern-runtime/classic.engine.enterprise.js"
+                }
             ]
         }};
 
@@ -66,23 +70,91 @@ test("getPaths", () => {
         ],
         loaderPath: {
             "Ext.Package": "/node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/src/Package.js",
-            "coon.core": "../src/"
+            "coon.core": "../src/",
+            "modern": "included"
         }
     });
     
 });
 
+const testConfigureWithExtJsLinkPaths = async function (extjsLinkConfig, config, result) {
 
-test("configureWithExtJsLinkPaths()", async () => {
+    const mockLoader = {
+        ping : jest.fn().mockResolvedValue(true),
+        load : jest.fn().mockResolvedValue(JSON.stringify(extjsLinkConfig))
+    };
 
-    const config = {
-        loaderPath: {
-            "Ext.Package": "/node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/src/Package.js",
-            "coon.core": "../src/"
+    l8.request.FileLoader.prototype.ping = mockLoader.ping;
+    l8.request.FileLoader.prototype.load = mockLoader.load;
+
+    let exp = await configureWithExtJsLinkPaths(config, "url", true);
+    expect(exp).toEqual(result);
+};
+
+test("configureWithExtJsLinkPaths() - 1", async () => {
+
+    const extjsLinkConfig = {
+            "css": {
+                "modern": ["modernCssA"]
+            },
+
+            "js": [{
+                "modern": "modernJsA"
+            }]
         },
-        preload: {
-            css: [{
-                extjs: {
+        config = {
+            preload: {
+                css: {
+                    modern: "preloadModernCssA"
+                },
+                js: "/node_modules/@l8js/l8/dist/l8.runtime.js"
+            }
+        },
+        result = {
+            loaderPath : {},
+            preload: [
+                "preloadModernCssA",
+                "modernCssA",
+                "/node_modules/@l8js/l8/dist/l8.runtime.js",
+                "modernJsA"
+            ]
+        };
+
+    await testConfigureWithExtJsLinkPaths(extjsLinkConfig, config, result);
+});
+
+test("configureWithExtJsLinkPaths() - 2", async () => {
+
+    const extjsLinkConfig = {
+            "css": {
+                "modern": "modernCssA",
+                "classic": "classicCssB"
+            },
+
+            "js": [{
+                "classic": [
+                    "classicJsC",
+                    "classicJsD"
+                ],
+                "modern": [
+                    "modernJsE",
+                    "modernJsF"
+                ]
+            }]
+        },
+        config = {
+            loaderPath: {
+                "Ext.Package": "/node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/src/Package.js",
+                "coon.core": "../src/",
+                "modern": {
+                    "modern": "included"
+                },
+                "classic": {
+                    "classic": "included"
+                }
+            },
+            preload: {
+                css: [{
                     modern: [
                         "/node_modules/@sencha/ext-modern-runtime/material/material-all_1.css",
                         "/node_modules/@sencha/ext-modern-runtime/material/material-all_2.css"
@@ -92,55 +164,31 @@ test("configureWithExtJsLinkPaths()", async () => {
                         "/node_modules/@sencha/ext-classic-runtime/material/material-all_2.css",
                         "/node_modules/@sencha/ext-classic-runtime/material/material-all_3.css"
                     ]
-                }
-            }],
-            js: [
-                "/node_modules/@l8js/l8/dist/l8.runtime.js", {
-                    extjs: {
+                }],
+                js: [
+                    "/node_modules/@l8js/l8/dist/l8.runtime.js", {
                         modern: "/node_modules/@sencha/ext-modern-runtime/modern.engine.enterprise.js",
                         classic: "/node_modules/@sencha/ext-modern-runtime/classic.engine.enterprise.js"
-                    }}
-            ]
-        }};
-
-    let fileLoader = new l8.request.FileLoader();
-    let spy = jest.spyOn(fileLoader, "load").mockReturnValue({
-
-        "css": {
-            "extjs": {
-                "modern": "A",
-                "classic": "B"
-            }
-        },
-
-        "js": [{
-            "extjs": {
-                "classic": [
-                    "C",
-                    "D"
-                ],
-                "modern": [
-                    "E",
-                    "F"
+                    }
                 ]
             }
-        }]
+        },
+        result = {
+            preload: [
+                "/node_modules/@sencha/ext-modern-runtime/material/material-all_1.css",
+                "/node_modules/@sencha/ext-modern-runtime/material/material-all_2.css",
+                "modernCssA",
+                "/node_modules/@l8js/l8/dist/l8.runtime.js",
+                "/node_modules/@sencha/ext-modern-runtime/modern.engine.enterprise.js",
+                "modernJsE",
+                "modernJsF"
+            ],
+            loaderPath: {
+                "Ext.Package": "/node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/src/Package.js",
+                "coon.core": "../src/",
+                "modern": "included"
+            }
+        };
 
-    });
-
-
-    expect(configureWithExtJsLinkPaths(config, "url", true)).resolves.toEqual({
-        preload: [
-            "A",
-            "/node_modules/@l8js/l8/dist/l8.runtime.js",
-            "E"
-        ],
-        loaderPath: {
-            "Ext.Package": "/node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/src/Package.js",
-            "coon.core": "../src/"
-        }
-    });
-
-    spy.mockClear();
-
+    await testConfigureWithExtJsLinkPaths(extjsLinkConfig, config, result);
 });
