@@ -77,7 +77,7 @@ test("getPaths", () => {
     
 });
 
-const testConfigureWithExtJsLinkPaths = async function (extjsLinkConfig, config, result) {
+const testConfigureWithExtJsLinkPaths = async function (extjsLinkConfig, config, result, isModern = true) {
 
     const mockLoader = {
         ping : jest.fn().mockResolvedValue(true),
@@ -87,7 +87,7 @@ const testConfigureWithExtJsLinkPaths = async function (extjsLinkConfig, config,
     l8.request.FileLoader.prototype.ping = mockLoader.ping;
     l8.request.FileLoader.prototype.load = mockLoader.load;
 
-    let exp = await configureWithExtJsLinkPaths(config, "url", true);
+    let exp = await configureWithExtJsLinkPaths(config, "url", isModern);
     expect(exp).toEqual(result);
 };
 
@@ -191,4 +191,53 @@ test("configureWithExtJsLinkPaths() - 2", async () => {
         };
 
     await testConfigureWithExtJsLinkPaths(extjsLinkConfig, config, result);
+});
+
+
+test("testConfigureWithExtJsLinkPaths - 3" , async () =>{
+
+    const extjsLinkConfig = {
+            css : {
+                modern : "modernCssA",
+                classic : "classicCssA"
+            },
+            js : {
+                modern : "modernJsA",
+                classic : "classicJsA"
+            }
+        },
+        config = {
+            loaderPath: {
+                "Ext.Package": "../node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/Package.js",
+                "Ext.package": "../node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/package",
+                "coon.core.overrides.core": "../overrides",
+                "coon.core.fixtures": "./fixtures",
+                "coon.core": "../src/",
+                "coon.test": "./src"
+            },
+            preload: {
+                js: ["../node_modules/@l8js/l8/dist/l8.runtime.umd.js", {
+                    classic: "../build/extjs-build/packages/ux/classic/ux-debug.js",
+                    modern: "../build/extjs-build/packages/ux/modern/ux-debug.js"
+                }]
+            }
+        },
+        result = {
+            preload: [
+                "classicCssA",
+                "../node_modules/@l8js/l8/dist/l8.runtime.umd.js",
+                "../build/extjs-build/packages/ux/classic/ux-debug.js",
+                "classicJsA"
+            ],
+            loaderPath: {
+                "Ext.Package": "../node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/Package.js",
+                "Ext.package": "../node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/package",
+                "coon.core.overrides.core": "../overrides",
+                "coon.core.fixtures": "./fixtures",
+                "coon.core": "../src/",
+                "coon.test": "./src"
+            }
+        };
+
+    await testConfigureWithExtJsLinkPaths(extjsLinkConfig, config, result, false);
 });
