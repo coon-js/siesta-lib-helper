@@ -1,3 +1,4 @@
+<!--
 /**
  * coon.js
  * siesta-lib-helper
@@ -23,36 +24,20 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import alias from '@rollup/plugin-alias';
+ /**
+  * file for redirecting from html-file specified as index-file to subfolder "tests"
+  * and its containing index.extjs-browser.html.
+  */
 
-export default [{
-    input: './src/index.js',
-    output : {
-        file :'./dist/siesta-lib-helper.runtime.esm.js',
-        format: 'esm',
-        sourcemap: 'inline',
-        name : "default"
-    },
-    plugins: [
-        alias({
-            entries: [
-                { find: '@l8js/l8', replacement: './node_modules/@l8js/l8/dist/l8.packages.esm.js' }
-            ]
-        })
-    ]
-}, {
-    input: './src/BoilerPlate.js',
-    output : {
-        file :'./dist/BoilerPlate.esm.js',
-        format: 'esm',
-        sourcemap: 'inline',
-        name : "default"
-    },
-    plugins: [
-        alias({
-            entries: [
-                { find: '@l8js/l8', replacement: './node_modules/@l8js/l8/dist/l8.packages.esm.js' }
-            ]
-        })
-    ]
-}];
+ -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="refresh" content="0;url=/tests/index.extjs-browser.html" />
+    <title>Page Moved</title>
+</head>
+<body>
+<a href="/tests">Tests -&gt;</a>
+</body>
+</html>

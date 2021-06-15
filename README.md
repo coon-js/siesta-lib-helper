@@ -2,19 +2,41 @@
 This npm-package provides a collection of utility- and helper-methods when working with [Siesta](https://bryntum.com) 
 in an [ExtJS](https://sencha.com)-Browser environment and **npm-packages** containing ExtJS-code.
 
-## prerequisites
-Siesta was installed as a npm-package and is available in the projects ```node_modules```-folder.
-
-```
-npm install --save-dev siesta-lite
-```
-
 ## Installation
 ```
 npm install --save-dev @coon-js/siesta-lib-helper
 ```
 
 ## Usage
+
+### Using the BoilerPlate.js for setting up ExtJS Browser Environment
+The `BoilerPlate.js` contains code that automatically creates an ExtJS-testing environment.
+To use the BoilerPlate, it should be sufficient to copy the `index.extjs-browser.html` into the target directory
+where your tests should run. Paths should be adjusted accordingly, if your testing environment does not
+match the following structure:
+
+(In this example, `index.extjs-browser.html` will be placed into `tests`)
+```
+./[MODULE_ROOT]
+./node_modules
+./tests
+```
+
+To simplify setting up your testing environment, `siesta-lib-helper` is available as a cli-programm that
+will copy a `tests.redirect.html`- and a `index.extjs-browser.html`-file into your module:
+
+```
+npx siesta-lib-helper
+```
+
+```
+./tests/index.extjs-browser.html
+./tests.redirect.html
+```
+
+Note: `tests.redirect.html` serves as a redirect in case your local web server requires a file being specified as the index of the 
+document-root. It is not require to properly create the ExtJS-Testing-Browser. 
+
 
 ### getPaths()
 The following example shows how to use a _test.config.js_ for configuring the tested environment to be used 

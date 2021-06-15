@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * coon.js
  * siesta-lib-helper
@@ -23,36 +24,47 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import alias from '@rollup/plugin-alias';
 
-export default [{
-    input: './src/index.js',
-    output : {
-        file :'./dist/siesta-lib-helper.runtime.esm.js',
-        format: 'esm',
-        sourcemap: 'inline',
-        name : "default"
-    },
-    plugins: [
-        alias({
-            entries: [
-                { find: '@l8js/l8', replacement: './node_modules/@l8js/l8/dist/l8.packages.esm.js' }
-            ]
-        })
-    ]
+
+
+import fs from "fs-extra";
+import path from "path";
+
+/**
+ * - Copies html-files from html-folder to target package.
+ */
+const files = [{
+    "from": path.dirname(import.meta.url).replace("file:///", "") + "/src/html/index.extjs-browser.html",
+    "to": path.resolve("./tests/index.extjs-browser.html")
 }, {
-    input: './src/BoilerPlate.js',
-    output : {
-        file :'./dist/BoilerPlate.esm.js',
-        format: 'esm',
-        sourcemap: 'inline',
-        name : "default"
-    },
-    plugins: [
-        alias({
-            entries: [
-                { find: '@l8js/l8', replacement: './node_modules/@l8js/l8/dist/l8.packages.esm.js' }
-            ]
-        })
-    ]
+    "from":path.dirname(import.meta.url).replace("file:///", "") + "/src/html/tests.redirect.html",
+    "to": path.resolve("./tests.redirect.html")
 }];
+
+const l = console.log;
+
+
+// +--------------------------------------------
+// |                  int main
+// +--------------------------------------------
+l([
+    "-----------------------------------------------------------",
+    "----         [@coon-js/siesta-lib-helper]              ----",
+    "----   https://github.com/coon-js/siesta-lib-helper    ----",
+    "------------------------------------------------------------"
+].join("\n"));
+
+files.forEach(file => {
+    try {
+        console.log(`Copying ${file.from} to ${file.to}`);
+        fs.copySync(file.from, file.to);
+        console.log("Success!");
+    } catch (err) {
+        console.error(err);
+        process.exit(1);
+    }
+
+});
+
+
+process.exit(0);
