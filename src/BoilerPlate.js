@@ -71,5 +71,5 @@ document.getElementById("cn_configBtn").onclick = () => {
             : document.getElementById("cn_modern").checked
                 ? "modern"
                 : "";
-    window.location.href = `./index.html?toolkit=${toolkit}&timeout=${timeout}`;
+    window.location.href = `./index.extjs-browser.html?toolkit=${toolkit}&timeout=${timeout}`;
 };
