@@ -44,7 +44,13 @@ const
     paths = await configureWithExtJsLinkPaths(testConfig, extjsLinkConfigUrl, toolkit === "modern");
 
 toolkitGroups = groups.filter(entry => ["universal", toolkit].indexOf(entry.group) !== -1);
-toolkit       = toolkitGroups.length ? toolkitGroups[0].group : "universal";
+// we need to check if the loader specifies different classes for modern/classic here, as the tests
+// might be declared as "universal", but the test cases load different files for the toolkits
+toolkit = toolkitGroups.length ? toolkitGroups[0].group : "universal";
+if (toolkit === "universal" && (testConfig.loaderPath.classic || testConfig.loaderPath.modern)) {
+    toolkit =  urlParams.get("toolkit") || (testConfig.loaderPath.classic ? "classic" : "modern");
+}
+
 
 browser.configure(Object.assign({
     title: `${testConfig.name} [${toolkit}]`,
