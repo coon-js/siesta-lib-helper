@@ -35,20 +35,26 @@ const
     extjsLinkConfigUrl = coonjs.extjsLinkConfigUrl;
 
 let toolkitGroups,
+    configuredToolkitGroups,
+    hasToolkitRelatedConfig = false,
     urlParams = new URLSearchParams(document.location.search.substring(1)),
     timeout =  urlParams.get("timeout") ? parseInt(urlParams.get("timeout")) : testConfig.timeout,
+    forcedToolkit = urlParams.get("toolkit"),
     toolkit = urlParams.get("toolkit") ?? "classic";
 
 const
     browser = new Siesta.Harness.Browser.ExtJS(),
     paths = await configureWithExtJsLinkPaths(testConfig, extjsLinkConfigUrl, toolkit === "modern");
 
-toolkitGroups = groups.filter(entry => ["universal", toolkit].indexOf(entry.group) !== -1);
+configuredToolkitGroups = groups.filter(entry => ["classic", "modern"].indexOf(entry.group) !== -1);
+hasToolkitRelatedConfig = configuredToolkitGroups.length > 0,
+    toolkitGroups = groups.filter(entry => ["universal", toolkit].indexOf(entry.group) !== -1);
 // we need to check if the loader specifies different classes for modern/classic here, as the tests
 // might be declared as "universal", but the test cases load different files for the toolkits
 toolkit = toolkitGroups.length ? toolkitGroups[0].group : "universal";
 if (toolkit === "universal" && (testConfig.loaderPath.classic || testConfig.loaderPath.modern)) {
     toolkit =  urlParams.get("toolkit") || (testConfig.loaderPath.classic ? "classic" : "modern");
+    forcedToolkit = toolkit;
 }
 
 
@@ -67,8 +73,10 @@ browser.start(toolkitGroups.length ? toolkitGroups : groups);
 document.getElementById("cn_timeout").value = timeout;
 if (["classic", "modern"].indexOf(toolkit) !== -1) {
     document.getElementById(`cn_${toolkit}`).checked = true;
-} else {
+} else if (!hasToolkitRelatedConfig) {
     ["classic", "modern"].forEach(toolkit => document.getElementById(`cn_${toolkit}`).disabled = true);
+} else if (hasToolkitRelatedConfig && ["classic", "modern"].indexOf(forcedToolkit) !== -1) {
+    document.getElementById(`cn_${forcedToolkit}`).checked = true;
 }
 document.getElementById("cn_configBtn").onclick = () => {
     let timeout = document.getElementById("cn_timeout").value,
