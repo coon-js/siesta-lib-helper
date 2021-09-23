@@ -25,8 +25,6 @@
  */
 
 
-
-
 import fs from "fs-extra";
 import path from "path";
 
@@ -41,13 +39,12 @@ const files = [{
     "to": path.resolve("./tests.redirect.html")
 }];
 
-const l = console.log;
-
 
 // +--------------------------------------------
 // |                  int main
 // +--------------------------------------------
-l([
+/* eslint-disable-next-line  no-console*/
+console.log([
     "-----------------------------------------------------------",
     "----         [@coon-js/siesta-lib-helper]              ----",
     "----   https://github.com/coon-js/siesta-lib-helper    ----",
@@ -56,10 +53,13 @@ l([
 
 files.forEach(file => {
     try {
+        /* eslint-disable-next-line  no-console */
         console.log(`Copying ${file.from} to ${file.to}`);
         fs.copySync(file.from, file.to);
+        /* eslint-disable-next-line  no-console */
         console.log("Success!");
     } catch (err) {
+        /* eslint-disable-next-line  no-console */
         console.error(err);
         process.exit(1);
     }
