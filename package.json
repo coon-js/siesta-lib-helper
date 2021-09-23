@@ -5,7 +5,8 @@
   "main": "dist/siesta-lib-helper.esm.js",
   "type": "module",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "rollup -c && node-git-hooks"
   },
   "bin": "bin.js",
   "repository": {
@@ -40,9 +41,10 @@
     "@l8js/l8": "file:../../@l8js/l8",
     "@rollup/plugin-alias": "^3.1.2",
     "@rollup/plugin-node-resolve": "^13.0.0",
+    "eslint": "^7.28.0",
     "fs-extra": "^10.0.0",
     "jest": "^27.0.4",
-    "rollup": "^2.50.6",
-    "eslint": "^7.28.0"
+    "node-git-hooks": "^1.0.6",
+    "rollup": "^2.50.6"
   }
 }
