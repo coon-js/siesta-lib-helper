@@ -128,7 +128,6 @@ export const configureWithExtJsLinkPaths = async function (testConfig, pathConfi
                 extJs =  l8.nchn("js", extjsLinkConfig, ff);
 
 
-
             l8.chn(toolkit, mergedCss, [].concat(css, [].concat(extCss)));
             l8.chn(toolkit, mergedJs, [].concat(js, [].concat(extJs)));
         });
