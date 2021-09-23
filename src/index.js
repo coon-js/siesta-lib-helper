@@ -112,7 +112,7 @@ export const configureWithExtJsLinkPaths = async function (testConfig, pathConfi
                 section.forEach(entry => {
                     if (l8.isString(entry)) {
                         res.push(entry);
-                    } else if (l8.ispo(entry)) {
+                    } else if (l8.isPlainObject(entry)) {
                         res = res.concat(entry[toolkit] ?? []);
                     }
                 });
@@ -121,20 +121,20 @@ export const configureWithExtJsLinkPaths = async function (testConfig, pathConfi
 
         ["classic", "modern"].forEach(toolkit => {
 
-            let ff = l8.ff.bind(null, toolkit),
-                css = collect([].concat(l8.nchn("preload.css", testConfig)), toolkit),
-                js = collect([].concat(l8.nchn("preload.js", testConfig)), toolkit),
-                extCss = l8.nchn("css", extjsLinkConfig, ff),
-                extJs =  l8.nchn("js", extjsLinkConfig, ff);
+            let ff = l8.findFirst.bind(null, toolkit),
+                css = collect([].concat(l8.unchain("preload.css", testConfig)), toolkit),
+                js = collect([].concat(l8.unchain("preload.js", testConfig)), toolkit),
+                extCss = l8.unchain("css", extjsLinkConfig, ff),
+                extJs =  l8.unchain("js", extjsLinkConfig, ff);
 
 
-            l8.chn(toolkit, mergedCss, [].concat(css, [].concat(extCss)));
-            l8.chn(toolkit, mergedJs, [].concat(js, [].concat(extJs)));
+            l8.chain(toolkit, mergedCss, [].concat(css, [].concat(extCss)));
+            l8.chain(toolkit, mergedJs, [].concat(js, [].concat(extJs)));
         });
 
 
-        l8.chn("preload.css", testConfig, mergedCss, true);
-        l8.chn("preload.js", testConfig, mergedJs, true);
+        l8.chain("preload.css", testConfig, mergedCss, true);
+        l8.chain("preload.js", testConfig, mergedJs, true);
     }
 
     return getPaths(testConfig, isModern);
