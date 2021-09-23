@@ -35,6 +35,7 @@ const
     extjsLinkConfigUrl = coonjs.extjsLinkConfigUrl;
 
 let toolkitGroups,
+    remainingGroups,
     configuredToolkitGroups,
     hasToolkitRelatedConfig = false,
     urlParams = new URLSearchParams(document.location.search.substring(1)),
@@ -43,47 +44,52 @@ let toolkitGroups,
     toolkit = urlParams.get("toolkit") ?? "classic";
 
 const
-    browser = new Siesta.Harness.Browser.ExtJS(),
-    paths = await configureWithExtJsLinkPaths(testConfig, extjsLinkConfigUrl, toolkit === "modern");
+    browser = new Siesta.Harness.Browser.ExtJS();
 
-configuredToolkitGroups = groups.filter(entry => ["classic", "modern"].indexOf(entry.group) !== -1);
-hasToolkitRelatedConfig = configuredToolkitGroups.length > 0,
+configureWithExtJsLinkPaths(testConfig, extjsLinkConfigUrl, toolkit === "modern").then((paths) => {
+
+
+    configuredToolkitGroups = groups.filter(entry => ["classic", "modern"].indexOf(entry.group) !== -1);
+    hasToolkitRelatedConfig = configuredToolkitGroups.length > 0;
     toolkitGroups = groups.filter(entry => ["universal", toolkit].indexOf(entry.group) !== -1);
-// we need to check if the loader specifies different classes for modern/classic here, as the tests
-// might be declared as "universal", but the test cases load different files for the toolkits
-toolkit = toolkitGroups.length ? toolkitGroups[0].group : "universal";
-if (toolkit === "universal" && (testConfig.loaderPath.classic || testConfig.loaderPath.modern)) {
-    toolkit =  urlParams.get("toolkit") || (testConfig.loaderPath.classic ? "classic" : "modern");
-    forcedToolkit = toolkit;
-}
-
-
-browser.configure(Object.assign({
-    title: `${testConfig.name} [${toolkit}]`,
-    isEcmaModule: true,
-    disableCaching: true,
-    config : {
-        TIMEOUT : timeout
+    // we need to check if the loader specifies different classes for modern/classic here, as the tests
+    // might be declared as "universal", but the test cases load different files for the toolkits
+    toolkit = toolkitGroups.length ? toolkitGroups[0].group : "universal";
+    if (toolkit === "universal" && (testConfig.loaderPath.classic || testConfig.loaderPath.modern)) {
+        toolkit =  urlParams.get("toolkit") || (testConfig.loaderPath.classic ? "classic" : "modern");
+        forcedToolkit = toolkit;
     }
-}, paths));
 
-browser.start(toolkitGroups.length ? toolkitGroups : groups);
+    remainingGroups = groups.filter(entry => ["universal", "classic", "modern"].indexOf(entry.group) === -1);
 
-// classic | modern | timeout options
-document.getElementById("cn_timeout").value = timeout;
-if (["classic", "modern"].indexOf(toolkit) !== -1) {
-    document.getElementById(`cn_${toolkit}`).checked = true;
-} else if (!hasToolkitRelatedConfig) {
-    ["classic", "modern"].forEach(toolkit => document.getElementById(`cn_${toolkit}`).disabled = true);
-} else if (hasToolkitRelatedConfig && ["classic", "modern"].indexOf(forcedToolkit) !== -1) {
-    document.getElementById(`cn_${forcedToolkit}`).checked = true;
-}
-document.getElementById("cn_configBtn").onclick = () => {
-    let timeout = document.getElementById("cn_timeout").value,
-        toolkit = document.getElementById("cn_classic").checked
-            ? "classic"
-            : document.getElementById("cn_modern").checked
-                ? "modern"
-                : "";
-    window.location.href = `./index.extjs-browser.html?toolkit=${toolkit}&timeout=${timeout}`;
-};
+    browser.configure(Object.assign({
+        title: `${testConfig.name} [${toolkit}]`,
+        isEcmaModule: true,
+        disableCaching: true,
+        config : {
+            TIMEOUT : timeout
+        }
+    }, paths));
+
+    browser.start((toolkitGroups.length ? toolkitGroups : groups).concat(remainingGroups));
+
+    // classic | modern | timeout options
+    document.getElementById("cn_timeout").value = timeout;
+    if (["classic", "modern"].indexOf(toolkit) !== -1) {
+        document.getElementById(`cn_${toolkit}`).checked = true;
+    } else if (!hasToolkitRelatedConfig) {
+        ["classic", "modern"].forEach(toolkit => document.getElementById(`cn_${toolkit}`).disabled = true);
+    } else if (hasToolkitRelatedConfig && ["classic", "modern"].indexOf(forcedToolkit) !== -1) {
+        document.getElementById(`cn_${forcedToolkit}`).checked = true;
+    }
+    document.getElementById("cn_configBtn").onclick = () => {
+        let timeout = document.getElementById("cn_timeout").value,
+            toolkit = document.getElementById("cn_classic").checked ?
+                "classic" :
+                document.getElementById("cn_modern").checked ? "modern" : "";
+
+        window.location.href = `./index.extjs-browser.html?toolkit=${toolkit}&timeout=${timeout}`;
+    };
+
+});
+
