@@ -247,5 +247,5 @@ npm test
 
 ### builds
 ```
-rollup -c
+npx rollup -c
 ```
