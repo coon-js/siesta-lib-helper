@@ -1,6 +1,6 @@
 {
   "name": "@coon-js/siesta-lib-helper",
-  "version": "0.1.0",
+  "version": "0.0.3",
   "description": "Collection of utility- and helper-methods when working with Siesta (https://bryntum.com) in an ExtJS-Browser environment.",
   "main": "dist/siesta-lib-helper.runtime.esm.js",
   "type": "module",
@@ -44,9 +44,9 @@
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.14.3",
     "@babel/preset-env": "^7.14.4",
-    "babel-jest": "^27.0.1",
     "@rollup/plugin-alias": "^3.1.2",
     "@rollup/plugin-node-resolve": "^13.0.0",
+    "babel-jest": "^27.0.1",
     "eslint": "^7.28.0",
     "jest": "^27.0.4",
     "node-git-hooks": "^1.0.6",
