@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "jest",
-    "prepare": "npx node-git-hooks",
-    "postinstall": "npx rollup -c",
+    "prepare": "npm run build && npx node-git-hooks",
+    "build": "npx rollup -c",
     "postversion": "git push && git push --tags"
   },
   "bin": "bin.js",
@@ -42,14 +42,14 @@
     "fs-extra": "^10.0.0"
   },
   "devDependencies": {
-    "@rollup/plugin-alias": "^3.1.2",
-    "@rollup/plugin-node-resolve": "^13.0.0",
     "@babel/plugin-transform-runtime": "^7.14.3",
     "@babel/preset-env": "^7.14.4",
+    "@rollup/plugin-alias": "^3.1.2",
+    "@rollup/plugin-node-resolve": "^13.0.0",
     "babel-jest": "^27.0.1",
     "eslint": "^7.28.0",
     "jest": "^27.0.4",
-    "rollup": "^2.50.5",
-    "node-git-hooks": "^1.0.6"
+    "node-git-hooks": "^1.0.6",
+    "rollup": "^2.57.0"
   }
 }
