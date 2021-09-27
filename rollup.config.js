@@ -23,7 +23,7 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import alias from '@rollup/plugin-alias';
+const alias = require('@rollup/plugin-alias');
 
 export default [{
     input: './src/index.js',
