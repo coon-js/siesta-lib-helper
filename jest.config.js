@@ -26,20 +26,10 @@
 export default {
     "testEnvironment": "jsdom",
     "verbose": true,
-    "moduleFileExtensions": [
-        "js",
-        "mjs",
-        "ts",
-        "tsx",
-        "json",
-        "node"
-    ],
-    "rootDir" : "./",
-    "testPathIgnorePatterns": [
-        "/node_modules/"
+    "transformIgnorePatterns": [
+        "/node_modules/(?!@l8js)/"
     ],
     "moduleNameMapper": {
         "^@l8js/l8$": "@l8js/l8/dist/l8.packages.esm.js"
-    },
-    "collectCoverage": false
+    }
 };
