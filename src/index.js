@@ -27,9 +27,9 @@ import * as l8 from "@l8js/l8";
 
 
 /**
- * Uses the specified testConfig and applies the extjs(!) related paths found at
+ * Uses the specified testConfig for teh preLoader-section and applies the related paths found at
  * pathConfigUrl (config-file url()) to it, then passes it to getPaths() and returns the value.
- * pathConfigUrl should be in a format @coon-js/extjs-link produces.
+ * content found at pathConfigUrl should be in a format @coon-js/extjs-link produces.
  *
  * @example
  *
@@ -37,20 +37,18 @@ import * as l8 from "@l8js/l8";
  *
  *  {
  *       css: [{
- *           extjs: {
  *               modern: [
  *                   "foo.css"
  *               ],
  *               classic: [
  *                   "bar.css"
  *               ]
- *           }
+ *
  *       }],
  *       js: {
- *          extjs: {
  *               modern: "modern.js",
  *               classic: "classic.js"
- *          }
+ *
  *      }
  *   }
  *
@@ -62,7 +60,6 @@ import * as l8 from "@l8js/l8";
  *   },
  *   preloads: {
  *       css: [{
- *           extjs: {
  *               modern: [
  *                   "/node_modules/@sencha/ext-modern-runtime/material/material-all_1.css",
  *                   "/node_modules/@sencha/ext-modern-runtime/material/material-all_2.css"
@@ -72,14 +69,12 @@ import * as l8 from "@l8js/l8";
  *                   "/node_modules/@sencha/ext-classic-runtime/material/material-all_2.css",
  *                   "/node_modules/@sencha/ext-classic-runtime/material/material-all_3.css"
  *               ]
- *           }
  *       }],
  *       js: [
  *           "/node_modules/@l8js/l8/dist/l8.runtime.js", {
- *           extjs: {
  *               modern: "/node_modules/@sencha/ext-modern-runtime/modern.engine.enterprise.js",
  *               classic: "/node_modules/@sencha/ext-modern-runtime/classic.engine.enterprise.js"
- *           }}
+ *           }
  *       ]
  *   }};
  *
@@ -87,6 +82,7 @@ import * as l8 from "@l8js/l8";
  *   //   preload : [
  *   //       "foo.css",
  *   //       "/node_modules/@l8js/l8/dist/l8.runtime.js",
+ *   //       "/node_modules/@sencha/ext-modern-runtime/modern.engine.enterprise.js"
  *   //       "modern.js"
  *   //   ],
  *   //   loaderPath : {
@@ -107,16 +103,38 @@ export const configureWithExtJsLinkPaths = async function (testConfig, pathConfi
         loader = new l8.request.FileLoader();
 
     if (await loader.ping(pathConfigUrl)) {
+
         const
-            symlinks = JSON.parse(await loader.load(pathConfigUrl)),
-            ff = l8.ff.bind(null, "extjs"),
-            css = l8.nchn("preload.css", testConfig, ff),
-            js =  l8.nchn("preload.js", testConfig, ff);
+            extjsLinkConfig = JSON.parse(await loader.load(pathConfigUrl)),
+            mergedCss = {}, mergedJs = {},
+            collect = (section, toolkit) => {
+                let res = [];
+                section.forEach(entry => {
+                    if (l8.isString(entry)) {
+                        res.push(entry);
+                    } else if (l8.isPlainObject(entry)) {
+                        res = res.concat(entry[toolkit] ?? []);
+                    }
+                });
+                return res;
+            };
 
         ["classic", "modern"].forEach(toolkit => {
-            css[toolkit] = l8.ff("extjs", symlinks.css)[toolkit];
-            js[toolkit] = l8.ff("extjs", symlinks.js)[toolkit];
+
+            let ff = l8.findFirst.bind(null, toolkit),
+                css = collect([].concat(l8.unchain("preload.css", testConfig)), toolkit),
+                js = collect([].concat(l8.unchain("preload.js", testConfig)), toolkit),
+                extCss = l8.unchain("css", extjsLinkConfig, ff),
+                extJs =  l8.unchain("js", extjsLinkConfig, ff);
+
+
+            l8.chain(toolkit, mergedCss, [].concat(css, [].concat(extCss)));
+            l8.chain(toolkit, mergedJs, [].concat(js, [].concat(extJs)));
         });
+
+
+        l8.chain("preload.css", testConfig, mergedCss, true);
+        l8.chain("preload.js", testConfig, mergedJs, true);
     }
 
     return getPaths(testConfig, isModern);
@@ -137,7 +155,6 @@ export const configureWithExtJsLinkPaths = async function (testConfig, pathConfi
  *   },
  *   preloads: {
  *       css: [{
- *           extjs: {
  *               modern: [
  *                   "/node_modules/@sencha/ext-modern-runtime/material/material-all_1.css",
  *                   "/node_modules/@sencha/ext-modern-runtime/material/material-all_2.css"
@@ -147,14 +164,12 @@ export const configureWithExtJsLinkPaths = async function (testConfig, pathConfi
  *                   "/node_modules/@sencha/ext-classic-runtime/material/material-all_2.css",
  *                   "/node_modules/@sencha/ext-classic-runtime/material/material-all_3.css"
  *               ]
- *           }
  *       }],
  *       js: [
  *           "/node_modules/@l8js/l8/dist/l8.runtime.js", {
- *           extjs: {
  *               modern: "/node_modules/@sencha/ext-modern-runtime/modern.engine.enterprise.js",
  *               classic: "/node_modules/@sencha/ext-modern-runtime/classic.engine.enterprise.js"
- *           }}
+ *          }
  *       ]
  *   }};
  *
@@ -185,28 +200,28 @@ export const getPaths = (config, isModern) => {
         parseSection = (section) => {
 
             section = [].concat(section);
+
             section.forEach((entry) => {
+
                 if (isString(entry)) {
                     result.preload.push(entry);
-                }
-
-                if (isObject(entry) && entry.extjs)  {
-                    let ext = entry.extjs;
-                    if (isString(ext)) {
-                        result.preload.push(ext);
-                    } else if (isObject(ext) && toolkit !== null) {
-                        if (isArray(ext[toolkit])) {
-                            result.preload = result.preload.concat(ext[toolkit]);
-                        } else if (isString(ext[toolkit])) {
-                            result.preload.push(ext[toolkit]);
-                        }
+                } else if (isObject(entry) && toolkit !== null) {
+                    if (isArray(entry[toolkit])) {
+                        result.preload = result.preload.concat(entry[toolkit]);
+                    } else if (isString(entry[toolkit])) {
+                        result.preload.push(entry[toolkit]);
                     }
                 }
+
             });
 
         };
 
-    Object.assign(result.loaderPath, config.loaderPath || {});
+    l8.assign(
+        result.loaderPath,
+        [config.loaderPath || {}, "classic", "modern"],
+        config.loaderPath && config.loaderPath[toolkit] ? config.loaderPath[toolkit] : {}
+    );
 
     const {js, css} = config.preload || {};
 
