@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "jest",
-    "prepare": "npm run build && npx node-git-hooks",
+    "postinstall": "npm run build && npx node-git-hooks",
     "build": "npx rollup -c",
     "postversion": "git push && git push --tags"
   },
