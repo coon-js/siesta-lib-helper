@@ -3,9 +3,28 @@ This npm-package provides a collection of utility- and helper-methods when worki
 in an [ExtJS](https://sencha.com)-Browser environment and **npm-packages** containing ExtJS-code.
 
 ## Installation
-```
+To use this package as an utility-lib with ExtJS-projects, include the package as a `devDependency`:
+
+```bash
 npm install --save-dev @coon-js/siesta-lib-helper
 ```
+
+Once the package was installed as a dependency, you have to make sure that building the sources succeeds
+within the target package. For this purpose, you need to call the `build:dev`-script of `@coon-js/siesta-lib-helper`.
+
+Edit the `scripts`-section of the **target package**, like so:
+
+```json
+"scripts": {
+  "build:deps" : "npm explore @coon-js/siesta-lib-helper npm run build:dev"
+}
+```
+
+Afterwards, the bin-script of `@coon-js/siesta-lib-helper` can be called via
+`
+npx siesta-lib-helper
+`
+
 
 ## Usage
 
@@ -25,7 +44,7 @@ match the following structure:
 To simplify setting up your testing environment, `siesta-lib-helper` is available as a cli-programm that
 will copy a `tests.redirect.html`- and a `index.extjs-browser.html`-file into your module:
 
-```
+```bash
 npx siesta-lib-helper
 ```
 
@@ -45,7 +64,7 @@ The corresponding builds and paths for the ExtJS-library were automatically crea
 
 
 _index.html_
-```
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -65,7 +84,7 @@ _index.js_ contains the instantiation of the browser-class and configures the Si
 
 
 _index.js_:
-```
+```javascript
 import groups from "./groups.config.js"; // contains test-structure
 import testConfig from "./tests.config.js";
 import {getPaths} from "../node_modules/@coon-js/siesta-lib-helper/dist/siesta-lib-helper.runtime.esm.js";
@@ -89,7 +108,7 @@ In this example, the configuration looks like this. While the ```loaderPath``` i
 on the existing resources you want to include in your tests, the preload of the ExtJS-library is mandatory:
 
 _tests.config.js_
-```
+```javascript
 export default {
     loaderPath: {
         "Ext.Package": "../node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/Package.js",
@@ -124,7 +143,7 @@ into a configuration as defined by a ```tests.config.js```-file, then passing it
 Basically, toolkit-groups defined in both files get merged.
 
 _index.html_
-```
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -144,7 +163,7 @@ required options:
 
 
 _index.js_:
-```
+```javascript
 import testConfig from "./tests.config.js";
 import groups from "./groups.config.js";
 import {configureWithExtJsLinkPaths} from "../node_modules/@coon-js/siesta-lib-helper/dist/siesta-lib-helper.runtime.esm.js";
@@ -166,7 +185,7 @@ browser.start(...groups);
 
 _.extjs-link.conf.json_
 
-```
+```json
  
    {
         css: [{
@@ -185,7 +204,7 @@ _.extjs-link.conf.json_
  ```
 
 _tests.config.js_
-```
+```javascript
 export default {
     loaderPath: {
         "Ext.Package": "../node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/Package.js",
@@ -217,7 +236,7 @@ export default {
 
 config produced by ```configureWithExtJsLinkPaths(testConfig, "../.extjs-link.conf.json", true)```
 
-```
+```json
 {
     loaderPath: {
         "Ext.Package": "../node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/Package.js",
@@ -247,5 +266,5 @@ npm test
 
 ### builds
 ```
-npx rollup -c
+npm run build
 ```
