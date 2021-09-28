@@ -5,10 +5,11 @@
   "main": "dist/siesta-lib-helper.runtime.esm.js",
   "type": "module",
   "scripts": {
-    "test": "jest",
-    "postinstall": "npm run build && npx node-git-hooks",
     "build": "npx rollup -c",
-    "postversion": "git push && git push --tags"
+    "build:hooks": "npx node-git-hooks",
+    "postversion": "git push && git push --tags",
+    "pretest": "npm run build",
+    "test": "jest"
   },
   "bin": "bin.js",
   "repository": {
