@@ -99,13 +99,10 @@ import * as l8 from "@l8js/l8";
  */
 export const configureWithExtJsLinkPaths = async function (testConfig, pathConfigUrl, isModern) {
 
-    const
-        loader = new l8.request.FileLoader();
-
-    if (await loader.ping(pathConfigUrl)) {
+    if (await l8.ping(pathConfigUrl)) {
 
         const
-            extjsLinkConfig = JSON.parse(await loader.load(pathConfigUrl)),
+            extjsLinkConfig = JSON.parse(await l8.load(pathConfigUrl)),
             mergedCss = {}, mergedJs = {},
             collect = (section, toolkit) => {
                 let res = [];

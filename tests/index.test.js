@@ -84,8 +84,10 @@ const testConfigureWithExtJsLinkPaths = async function (extjsLinkConfig, config,
         load : jest.fn().mockResolvedValue(JSON.stringify(extjsLinkConfig))
     };
 
-    l8.request.FileLoader.prototype.ping = mockLoader.ping;
-    l8.request.FileLoader.prototype.load = mockLoader.load;
+    /* eslint-disable-next-line no-import-assign */
+    l8.ping = mockLoader.ping;
+    /* eslint-disable-next-line no-import-assign */
+    l8.load = mockLoader.load;
 
     let exp = await configureWithExtJsLinkPaths(config, "url", isModern);
     expect(exp).toEqual(result);
