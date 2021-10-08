@@ -1,13 +1,13 @@
-# @coon-js/siesta-lib-helper
+# @coon-js/siesta-lib-helper ![MIT](https://img.shields.io/npm/l/@coon-js/siesta-lib-helper) [![npm version](https://badge.fury.io/js/@coon-js%2Fsiesta-lib-helper.svg)](https://badge.fury.io/js/@coon-js%2Fsiesta-lib-helper) ![build](https://github.com/coon-js/siesta-lib-helper/actions/workflows/run.tests.yml/badge.svg)
+
 This npm-package provides a collection of utility- and helper-methods when working with [Siesta](https://bryntum.com) 
 in an [ExtJS](https://sencha.com)-Browser environment and **npm-packages** containing ExtJS-code.
 
 ## Installation
+
 To use this package as an utility-lib with ExtJS-projects, include the package as a `devDependency`:
 
 ```bash
-npm install --save-dev @coon-js/siesta-lib-helper
-```
 
 Once the package was installed as a dependency, you have to make sure that building the sources succeeds
 within the target package. For this purpose, you need to call the `build:dev`-script of `@coon-js/siesta-lib-helper`.
@@ -44,8 +44,8 @@ match the following structure:
 To simplify setting up your testing environment, `siesta-lib-helper` is available as a cli-programm that
 will copy a `tests.redirect.html`- and a `index.extjs-browser.html`-file into your module:
 
-```bash
-npx siesta-lib-helper
+```shell
+$ npx siesta-lib-helper
 ```
 
 ```
@@ -188,17 +188,17 @@ _.extjs-link.conf.json_
 ```json
  
    {
-        css: [{
-                modern: [
+        "css": [{
+                "modern": [
                     "foo.css"
                 ],
-                classic: [
+                "classic": [
                     "bar.css"
                 ]
         }],
-        js: {
-                modern: "modern.js",
-                classic: "classic.js"
+        "js": {
+                "modern": "modern.js",
+                "classic": "classic.js"
        }
     }
  ```
@@ -238,7 +238,7 @@ config produced by ```configureWithExtJsLinkPaths(testConfig, "../.extjs-link.co
 
 ```json
 {
-    loaderPath: {
+    "loaderPath": {
         "Ext.Package": "../node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/Package.js",
         "Ext.package": "../node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/package",
         "coon.core.overrides.core": "../overrides",
@@ -246,7 +246,7 @@ config produced by ```configureWithExtJsLinkPaths(testConfig, "../.extjs-link.co
         "coon.core": "../src/",
         "coon.test": "./src"
     },
-    preload: [
+    "preload": [
        "foo.css",
        "modern.js",
        "./build/extjs-link/extjs/modern/theme-triton/resources/theme-triton-all-debug.css",
@@ -260,8 +260,8 @@ config produced by ```configureWithExtJsLinkPaths(testConfig, "../.extjs-link.co
 
 ## CI
 ### tests
-```
-npm test
+```shell
+$ npm test
 ```
 
 ### builds
