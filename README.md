@@ -4,8 +4,8 @@ This npm-package provides a collection of utility- and helper-methods when worki
 in an [ExtJS](https://sencha.com)-Browser environment and **npm-packages** containing ExtJS-code.
 
 ## Installation
-```
-npm install --save-dev @coon-js/siesta-lib-helper
+```shell
+$ npm install --save-dev @coon-js/siesta-lib-helper
 ```
 
 ## Usage
@@ -26,8 +26,8 @@ match the following structure:
 To simplify setting up your testing environment, `siesta-lib-helper` is available as a cli-programm that
 will copy a `tests.redirect.html`- and a `index.extjs-browser.html`-file into your module:
 
-```
-npx siesta-lib-helper
+```shell
+$ npx siesta-lib-helper
 ```
 
 ```
@@ -46,7 +46,7 @@ The corresponding builds and paths for the ExtJS-library were automatically crea
 
 
 _index.html_
-```
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -66,7 +66,7 @@ _index.js_ contains the instantiation of the browser-class and configures the Si
 
 
 _index.js_:
-```
+```javascript
 import groups from "./groups.config.js"; // contains test-structure
 import testConfig from "./tests.config.js";
 import {getPaths} from "../node_modules/@coon-js/siesta-lib-helper/dist/siesta-lib-helper.runtime.esm.js";
@@ -90,7 +90,7 @@ In this example, the configuration looks like this. While the ```loaderPath``` i
 on the existing resources you want to include in your tests, the preload of the ExtJS-library is mandatory:
 
 _tests.config.js_
-```
+```javascript
 export default {
     loaderPath: {
         "Ext.Package": "../node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/Package.js",
@@ -125,7 +125,7 @@ into a configuration as defined by a ```tests.config.js```-file, then passing it
 Basically, toolkit-groups defined in both files get merged.
 
 _index.html_
-```
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -145,7 +145,7 @@ required options:
 
 
 _index.js_:
-```
+```javascript
 import testConfig from "./tests.config.js";
 import groups from "./groups.config.js";
 import {configureWithExtJsLinkPaths} from "../node_modules/@coon-js/siesta-lib-helper/dist/siesta-lib-helper.runtime.esm.js";
@@ -167,26 +167,26 @@ browser.start(...groups);
 
 _.extjs-link.conf.json_
 
-```
+```json
  
    {
-        css: [{
-                modern: [
+        "css": [{
+                "modern": [
                     "foo.css"
                 ],
-                classic: [
+                "classic": [
                     "bar.css"
                 ]
         }],
-        js: {
-                modern: "modern.js",
-                classic: "classic.js"
+        "js": {
+                "modern": "modern.js",
+                "classic": "classic.js"
        }
     }
  ```
 
 _tests.config.js_
-```
+```javascript
 export default {
     loaderPath: {
         "Ext.Package": "../node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/Package.js",
@@ -218,9 +218,9 @@ export default {
 
 config produced by ```configureWithExtJsLinkPaths(testConfig, "../.extjs-link.conf.json", true)```
 
-```
+```json
 {
-    loaderPath: {
+    "loaderPath": {
         "Ext.Package": "../node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/Package.js",
         "Ext.package": "../node_modules/@coon-js/extjs-package-loader/packages/package-loader/src/package",
         "coon.core.overrides.core": "../overrides",
@@ -228,7 +228,7 @@ config produced by ```configureWithExtJsLinkPaths(testConfig, "../.extjs-link.co
         "coon.core": "../src/",
         "coon.test": "./src"
     },
-    preload: [
+    "preload": [
        "foo.css",
        "modern.js",
        "./build/extjs-link/extjs/modern/theme-triton/resources/theme-triton-all-debug.css",
@@ -242,11 +242,11 @@ config produced by ```configureWithExtJsLinkPaths(testConfig, "../.extjs-link.co
 
 ## CI
 ### tests
-```
-npm test
+```shell
+$ npm test
 ```
 
 ### builds
-```
-npx rollup -c
+```shell
+$ npx rollup -c
 ```
