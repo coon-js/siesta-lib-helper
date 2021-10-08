@@ -8,8 +8,10 @@ in an [ExtJS](https://sencha.com)-Browser environment and **npm-packages** conta
 To use this package as an utility-lib with ExtJS-projects, include the package as a `devDependency`:
 
 ```bash
+$ npm i --save-dev @coon-js/siesta-lib-helper
+```
 
-Once the package was installed as a dependency, you have to make sure that building the sources succeeds
+Once the package was installed, you have to make sure that building the sources succeeds
 within the target package. For this purpose, you need to call the `build:dev`-script of `@coon-js/siesta-lib-helper`.
 
 Edit the `scripts`-section of the **target package**, like so:
