@@ -1,4 +1,5 @@
-# @coon-js/siesta-lib-helper
+# @coon-js/siesta-lib-helper ![MIT](https://img.shields.io/npm/l/@coon-js/siesta-lib-helper) [![npm version](https://badge.fury.io/js/@coon-js%2Fsiesta-lib-helper.svg)](https://badge.fury.io/js/@coon-js%2Fsiesta-lib-helper) ![build](https://github.com/coon-js/siesta-lib-helper/actions/workflows/run.tests.yml/badge.svg)
+
 This npm-package provides a collection of utility- and helper-methods when working with [Siesta](https://bryntum.com) 
 in an [ExtJS](https://sencha.com)-Browser environment and **npm-packages** containing ExtJS-code.
 
