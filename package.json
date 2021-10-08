@@ -8,7 +8,11 @@
     "test": "jest",
     "prepare": "npx node-git-hooks",
     "postinstall": "npx rollup -c",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "release": "standard-version",
+    "release:patch": "standard-version --release-as patch && npm run postversion",
+    "release:minor": "standard-version --release-as minor && npm run postversion",
+    "release:major": "standard-version --release-as major && npm run postversion"
   },
   "bin": "bin.js",
   "repository": {
@@ -50,6 +54,9 @@
     "eslint": "^7.28.0",
     "jest": "^27.0.4",
     "node-git-hooks": "^1.0.6",
-    "rollup": "^2.50.6"
+    "rollup": "^2.50.6",
+    "@commitlint/cli": "^13.2.0",
+    "@commitlint/config-conventional": "^13.2.0",
+    "standard-version": "^9.3.1"
   }
 }
