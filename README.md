@@ -1,34 +1,23 @@
 # @coon-js/siesta-lib-helper ![MIT](https://img.shields.io/npm/l/@coon-js/siesta-lib-helper) [![npm version](https://badge.fury.io/js/@coon-js%2Fsiesta-lib-helper.svg)](https://badge.fury.io/js/@coon-js%2Fsiesta-lib-helper) ![build](https://github.com/coon-js/siesta-lib-helper/actions/workflows/run.tests.yml/badge.svg)
 
-This npm-package provides a collection of utility- and helper-methods when working with [Siesta](https://bryntum.com) 
-in an [ExtvJS](https://sencha.com)-Browser environment and **npm-packages** containing Ext JS-code.
+Easy setup for testing Ext JS with [Siesta](https://bryntum.com).
+
+#### About
+This npm-package provides a collection of utility- and helper-methods for [Siesta](https://bryntum.com) 
+and [Ext JS](https://sencha.com). 
 
 ## Installation
-
-To use this package as an utility-lib with Ext JS-projects, include the package as a `devDependency`:
+To use this package with Ext JS-projects, include the package as a `devDependency`:
 
 ```bash
 $ npm i --save-dev @coon-js/siesta-lib-helper
 ```
 
-Once the package was installed, you have to make sure that building the sources succeeds
-within the target package. For this purpose, you need to call the `build:dev`-script of `@coon-js/siesta-lib-helper`.
+A binary of `@coon-js/siesta-lib-helper` can then be called:
 
-Edit the `scripts`-section of the **target package**, like so:
-
-```json
-{
-    "scripts": {
-        "build:deps" : "npm explore @coon-js/siesta-lib-helper npm run build:dev"
-    }
-}
-```
-
-Afterwards, the bin-script of `@coon-js/siesta-lib-helper` can be called via
 `
 npx siesta-lib-helper
 `
-
 
 ## Usage
 
