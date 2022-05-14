@@ -40,7 +40,7 @@ export default [{
             ]
         })
     ],
-    external: ["crypto-js/md5"]
+    external: ["crypto-js/md5.js"]
 }, {
     input: './src/BoilerPlate.js',
     output : {
@@ -56,5 +56,5 @@ export default [{
             ]
         })
     ],
-    external: ["crypto-js/md5"]
+    external: ["crypto-js/md5.js"]
 }];
