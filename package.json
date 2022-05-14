@@ -11,9 +11,10 @@
     "postversion": "git push && git push --tags",
     "test": "jest",
     "release": "standard-version",
-    "release:patch": "standard-version --release-as patch && npm run postversion",
-    "release:minor": "standard-version --release-as minor && npm run postversion",
-    "release:major": "standard-version --release-as major && npm run postversion"
+    "preversion": "npm test && npm run build",
+    "release:patch": "npm run preversion && standard-version --release-as patch && npm run postversion",
+    "release:minor": "npm run preversion && standard-version --release-as minor && npm run postversion",
+    "release:major": "npm run preversion && standard-version --release-as major && npm run postversion"
   },
   "bin": "bin.js",
   "repository": {
@@ -58,6 +59,7 @@
     "jest": "^27.0.4",
     "node-git-hooks": "^1.0.6",
     "rollup": "^2.50.6",
+    "rollup-plugin-ignore": "^1.0.10",
     "standard-version": "^9.3.1"
   }
 }

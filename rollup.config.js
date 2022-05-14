@@ -23,6 +23,8 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import ignore from "rollup-plugin-ignore";
+
 const alias = require('@rollup/plugin-alias');
 
 export default [{
@@ -34,13 +36,13 @@ export default [{
         name : "default"
     },
     plugins: [
+        ignore(["crypto-js/md5.js"]),
         alias({
             entries: [
                 { find: '@l8js/l8', replacement: './node_modules/@l8js/l8/dist/l8.packages.esm.js' }
             ]
         })
-    ],
-    external: ["crypto-js/md5.js"]
+    ]
 }, {
     input: './src/BoilerPlate.js',
     output : {
@@ -50,11 +52,11 @@ export default [{
         name : "default"
     },
     plugins: [
+        ignore(["crypto-js/md5.js"]),
         alias({
             entries: [
                 { find: '@l8js/l8', replacement: './node_modules/@l8js/l8/dist/l8.packages.esm.js' }
             ]
         })
-    ],
-    external: ["crypto-js/md5.js"]
+    ]
 }];
