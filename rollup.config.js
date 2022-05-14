@@ -1,7 +1,7 @@
 /**
  * coon.js
  * siesta-lib-helper
- * Copyright (C) 2021 Thorsten Suckow-Homberg https://github.com/coon-js/siesta-lib-helper
+ * Copyright (C) 2021-2022 Thorsten Suckow-Homberg https://github.com/coon-js/siesta-lib-helper
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -39,7 +39,8 @@ export default [{
                 { find: '@l8js/l8', replacement: './node_modules/@l8js/l8/dist/l8.packages.esm.js' }
             ]
         })
-    ]
+    ],
+    external: ["crypto-js/md5"]
 }, {
     input: './src/BoilerPlate.js',
     output : {
@@ -54,5 +55,6 @@ export default [{
                 { find: '@l8js/l8', replacement: './node_modules/@l8js/l8/dist/l8.packages.esm.js' }
             ]
         })
-    ]
+    ],
+    external: ["crypto-js/md5"]
 }];

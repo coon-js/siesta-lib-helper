@@ -43,12 +43,14 @@
   },
   "homepage": "https://github.com/coon-js/siesta-lib-helper#readme",
   "dependencies": {
-    "@l8js/l8": "^0.5.5",
+    "@l8js/l8": "^0.7.1",
     "fs-extra": "^10.0.0"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.14.3",
     "@babel/preset-env": "^7.14.4",
+    "@commitlint/cli": "^13.2.0",
+    "@commitlint/config-conventional": "^13.2.0",
     "@rollup/plugin-alias": "^3.1.5",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "babel-jest": "^27.0.1",
@@ -56,8 +58,6 @@
     "jest": "^27.0.4",
     "node-git-hooks": "^1.0.6",
     "rollup": "^2.50.6",
-    "@commitlint/cli": "^13.2.0",
-    "@commitlint/config-conventional": "^13.2.0",
     "standard-version": "^9.3.1"
   }
 }
