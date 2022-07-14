@@ -1,7 +1,7 @@
 /**
  * coon.js
  * siesta-lib-helper
- * Copyright (C) 2021 Thorsten Suckow-Homberg https://github.com/coon-js/siesta-lib-helper
+ * Copyright (C) 2021-2022 Thorsten Suckow-Homberg https://github.com/coon-js/siesta-lib-helper
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -23,6 +23,8 @@
  * USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import ignore from "rollup-plugin-ignore";
+
 const alias = require('@rollup/plugin-alias');
 
 export default [{
@@ -34,6 +36,7 @@ export default [{
         name : "default"
     },
     plugins: [
+        ignore(["crypto-js/md5.js"]),
         alias({
             entries: [
                 { find: '@l8js/l8', replacement: './node_modules/@l8js/l8/dist/l8.packages.esm.js' }
@@ -49,6 +52,7 @@ export default [{
         name : "default"
     },
     plugins: [
+        ignore(["crypto-js/md5.js"]),
         alias({
             entries: [
                 { find: '@l8js/l8', replacement: './node_modules/@l8js/l8/dist/l8.packages.esm.js' }

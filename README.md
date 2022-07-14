@@ -1,37 +1,28 @@
 # @coon-js/siesta-lib-helper ![MIT](https://img.shields.io/npm/l/@coon-js/siesta-lib-helper) [![npm version](https://badge.fury.io/js/@coon-js%2Fsiesta-lib-helper.svg)](https://badge.fury.io/js/@coon-js%2Fsiesta-lib-helper) ![build](https://github.com/coon-js/siesta-lib-helper/actions/workflows/run.tests.yml/badge.svg)
 
-This npm-package provides a collection of utility- and helper-methods when working with [Siesta](https://bryntum.com) 
-in an [ExtJS](https://sencha.com)-Browser environment and **npm-packages** containing ExtJS-code.
+Easy setup for testing Ext JS with [Siesta](https://bryntum.com).
+
+#### About
+This npm-package provides a collection of utility- and helper-methods for [Siesta](https://bryntum.com) 
+and [Ext JS](https://sencha.com). 
 
 ## Installation
-
-To use this package as an utility-lib with ExtJS-projects, include the package as a `devDependency`:
+To use this package with Ext JS-projects, include the package as a `devDependency`:
 
 ```bash
 $ npm i --save-dev @coon-js/siesta-lib-helper
 ```
 
-Once the package was installed, you have to make sure that building the sources succeeds
-within the target package. For this purpose, you need to call the `build:dev`-script of `@coon-js/siesta-lib-helper`.
+A binary of `@coon-js/siesta-lib-helper` can then be called:
 
-Edit the `scripts`-section of the **target package**, like so:
-
-```json
-"scripts": {
-  "build:deps" : "npm explore @coon-js/siesta-lib-helper npm run build:dev"
-}
-```
-
-Afterwards, the bin-script of `@coon-js/siesta-lib-helper` can be called via
 `
 npx siesta-lib-helper
 `
 
-
 ## Usage
 
-### Using the BoilerPlate.js for setting up ExtJS Browser Environment
-The `BoilerPlate.js` contains code that automatically creates an ExtJS-testing environment.
+### Using the BoilerPlate.js for setting up Ext JS Browser Environment
+The `BoilerPlate.js` contains code that automatically creates an Ext JS-testing environment.
 To use the BoilerPlate, it should be sufficient to copy the `index.extjs-browser.html` into the target directory
 where your tests should run. Paths should be adjusted accordingly, if your testing environment does not
 match the following structure:
@@ -56,13 +47,13 @@ $ npx siesta-lib-helper
 ```
 
 Note: `tests.redirect.html` serves as a redirect in case your local web server requires a file being specified as the index of the 
-document-root. It is not require to properly create the ExtJS-Testing-Browser. 
+document-root. It is not require to properly create the Ext JS-Testing-Browser. 
 
 
 ### getPaths()
 The following example shows how to use a _test.config.js_ for configuring the tested environment to be used 
 with [Siesta.Harness.Browser.ExtJS](https://www.bryntum.com/docs/siesta/#!/api/Siesta.Harness.Browser.ExtJS).
-The corresponding builds and paths for the ExtJS-library were automatically created with [@coon-js/extjs-link](https://github.com/coon-js/extjs-link).
+The corresponding builds and paths for the Ext JS-library were automatically created with [@coon-js/extjs-link](https://github.com/coon-js/extjs-link).
 
 
 _index.html_
@@ -107,7 +98,7 @@ browser.start(...groups);
 ```
 
 In this example, the configuration looks like this. While the ```loaderPath``` is most of the time depending
-on the existing resources you want to include in your tests, the preload of the ExtJS-library is mandatory:
+on the existing resources you want to include in your tests, the preload of the Ext JS-library is mandatory:
 
 _tests.config.js_
 ```javascript

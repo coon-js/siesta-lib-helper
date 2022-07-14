@@ -1,6 +1,6 @@
 {
   "name": "@coon-js/siesta-lib-helper",
-  "version": "0.1.11",
+  "version": "0.1.16",
   "description": "Collection of utility- and helper-methods when working with Siesta (https://bryntum.com) in an ExtJS-Browser environment.",
   "main": "dist/siesta-lib-helper.runtime.esm.js",
   "type": "module",
@@ -11,9 +11,10 @@
     "postversion": "git push && git push --tags",
     "test": "jest",
     "release": "standard-version",
-    "release:patch": "standard-version --release-as patch && npm run postversion",
-    "release:minor": "standard-version --release-as minor && npm run postversion",
-    "release:major": "standard-version --release-as major && npm run postversion"
+    "preversion": "npm test && npm run build",
+    "release:patch": "npm run preversion && standard-version --release-as patch && npm run postversion",
+    "release:minor": "npm run preversion && standard-version --release-as minor && npm run postversion",
+    "release:major": "npm run preversion && standard-version --release-as major && npm run postversion"
   },
   "bin": "bin.js",
   "repository": {
@@ -43,12 +44,14 @@
   },
   "homepage": "https://github.com/coon-js/siesta-lib-helper#readme",
   "dependencies": {
-    "@l8js/l8": "^0.5.5",
+    "@l8js/l8": "^0.7.2",
     "fs-extra": "^10.0.0"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.14.3",
     "@babel/preset-env": "^7.14.4",
+    "@commitlint/cli": "^13.2.0",
+    "@commitlint/config-conventional": "^13.2.0",
     "@rollup/plugin-alias": "^3.1.5",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "babel-jest": "^27.0.1",
@@ -56,8 +59,7 @@
     "jest": "^27.0.4",
     "node-git-hooks": "^1.0.6",
     "rollup": "^2.50.6",
-    "@commitlint/cli": "^13.2.0",
-    "@commitlint/config-conventional": "^13.2.0",
+    "rollup-plugin-ignore": "^1.0.10",
     "standard-version": "^9.3.1"
   }
 }
