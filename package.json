@@ -5,7 +5,7 @@
   "main": "dist/siesta-lib-helper.runtime.esm.js",
   "type": "module",
   "scripts": {
-    "build": "npx rollup -c",
+    "build": "npm ci --save-dev && npx rollup -c",
     "build:dev": "npm i --save-dev && npm run build && npm run build:hooks",
     "build:hooks": "npx node-git-hooks",
     "postversion": "git push && git push --tags",
