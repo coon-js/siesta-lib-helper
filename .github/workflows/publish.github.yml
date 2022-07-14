@@ -19,6 +19,10 @@ jobs:
           node-version: 16
           registry-url: 'https://npm.pkg.github.com'
           scope: '@coon-js'
+      - name: Building dist
+        run: |
+          npm ci --save-dev
+          npm run build
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
